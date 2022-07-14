@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import RandomGifContainer from "./components/RandomGifContainer";
 
-function App() {
+const App = () => {
+  const [randomGif, setRandomGif] = useState(null);
+
+  const getRandomGif = async () => {
+    axios
+      .get(
+        "https://api.giphy.com/v1/gifs/random?api_key=f08Y8cr0HS7zNCcFNGxoE0wvyIshrcCA&tag=dog&rating=g"
+      )
+      .then((res) => {
+        setRandomGif(res.data.data);
+      });
+  };
+
+  useEffect(() => {
+    getRandomGif();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <RandomGifContainer randomGif={randomGif} />
+      <button onClick={getRandomGif}>Random Gif</button>
+    </>
   );
-}
+};
 
 export default App;
